@@ -3,7 +3,6 @@ package equipesInterclub.util;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -23,7 +22,7 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
  * @author Jordan Mosio
  * 
  */
-public class ExcelReader {
+public final class ExcelReader {
 
 	/**
 	 * Class logger.
@@ -31,12 +30,18 @@ public class ExcelReader {
 	private static final Logger LOGGER = Logger.getLogger(ExcelReader.class);
 
 	/**
+	 * Interdit.
+	 */
+	private ExcelReader() {
+	}
+
+	/**
 	 * 
 	 * @param file Le fichier à lire.
 	 * @return La liste des lignes lues.
-	 * @throws IOException Si le fichier n'existe pas.
+	 * @throws Exception Si le fichier n'existe pas.
 	 */
-	public static List<List<String>> readLines(File file) throws IOException {
+	public static List<List<String>> readLines(File file) throws Exception {
 
 		LOGGER.debug(MessageFormat.format("Reading file {0}...", file));
 		List<List<String>> result = new ArrayList<List<String>>();
@@ -60,8 +65,9 @@ public class ExcelReader {
 		// every sheet has rows, iterate over them
 		Iterator<Row> rowIterator = sheet.iterator();
 		while (rowIterator.hasNext()) {
-			String name = "";
-			String shortCode = "";
+
+			List<String> line = new ArrayList<String>();
+			result.add(line);
 
 			// Get the row object
 			Row row = rowIterator.next();
@@ -70,24 +76,20 @@ public class ExcelReader {
 			Iterator<Cell> cellIterator = row.cellIterator();
 
 			while (cellIterator.hasNext()) {
+
 				// Get the Cell object
 				Cell cell = cellIterator.next();
 
 				// check the cell type and process accordingly
 				switch (cell.getCellType()) {
 				case Cell.CELL_TYPE_STRING:
-					if (shortCode.equalsIgnoreCase("")) {
-						shortCode = cell.getStringCellValue().trim();
-					} else if (name.equalsIgnoreCase("")) {
-						// 2nd column
-						name = cell.getStringCellValue().trim();
-					} else {
-						// random data, leave it
-						System.out.println("Random data::" + cell.getStringCellValue());
-					}
+					line.add(cell.getStringCellValue());
 					break;
 				case Cell.CELL_TYPE_NUMERIC:
-					System.out.println("Random data::" + cell.getNumericCellValue());
+					line.add(String.valueOf(Math.round(cell.getNumericCellValue())));
+					break;
+				default:
+					throw new Exception("Unsupported data type: " + cell.getCellType());
 				}
 			} // end of cell iterator
 		} // end of rows iterator
