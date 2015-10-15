@@ -14,6 +14,10 @@ public class TestExcelReader {
 
 	private static List<List<String>> testResults;
 
+	/**
+	 * 
+	 * @throws Exception
+	 */
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
 		Object o = new Object();

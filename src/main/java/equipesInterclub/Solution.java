@@ -158,7 +158,7 @@ public class Solution {
 			Swimmer swimmer = swimmers[races.get(race)];
 
 			int point = swimmer.getMaxPoints();
-			int pointsRace = swimmer.getPoints(race);
+			final int pointsRace = swimmer.getPoints(race);
 
 			lines.get(index).append("- Max du nageur ");
 			lines.get(index).append(point);
