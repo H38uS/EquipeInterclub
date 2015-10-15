@@ -10,6 +10,7 @@
 
 	<Loggers>
 		<logger name="org" level="warn" />
+		<logger name="mosioj" level="debug"/>
 		<logger name="equipesInterclub" level="debug"/>
 		<Root>
 			<AppenderRef ref="Console" />
