@@ -12,7 +12,7 @@ import equipesInterclub.Race;
  * @author Jordan Mosio
  * 
  */
-public abstract class Swimmer {
+public abstract class Swimmer extends SportMember {
 
 	/**
 	 * Les nages du nageur, avec les points associés.
@@ -74,7 +74,7 @@ public abstract class Swimmer {
 
     @Override
     public String toString() {
-	    return MessageFormat.format("{0} {1}", name, surname);
+	    return MessageFormat.format("{0} {1}", surname, name);
     }
 
     /**
