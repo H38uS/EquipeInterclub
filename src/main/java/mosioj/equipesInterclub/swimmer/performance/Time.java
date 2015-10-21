@@ -1,5 +1,7 @@
 package mosioj.equipesInterclub.swimmer.performance;
 
+import org.apache.log4j.Logger;
+
 /**
  * The time of a race made by a swimmer.
  * 
@@ -8,9 +10,14 @@ package mosioj.equipesInterclub.swimmer.performance;
  */
 public class Time {
 
-	private final int minutes;
-	private final int secondes;
-	private final int millisecondes;
+	/**
+	 * Class logger.
+	 */
+	private static final Logger LOGGER = Logger.getLogger(Time.class);
+
+	private int minutes;
+	private int secondes;
+	private int millisecondes;
 
 	/**
 	 * Class constructor.
@@ -82,5 +89,54 @@ public class Time {
 	 */
 	public static Time getFromLong(long ms) {
 		return new Time((int) (ms / 100 / 60), (int) (ms / 100 % 60), (int) (ms % 100));
+	}
+	
+	/**
+	 * Adds the given amount of millisecond to the current time.
+	 * 
+	 * @param baseMS
+	 */
+	public void addMs(int baseMS) {
+		LOGGER.debug("Was: " + toString());
+		Time copy = getFromLong(getAsLong() + baseMS);
+		millisecondes = copy.millisecondes;
+		secondes = copy.secondes;
+		minutes = copy.minutes;
+		LOGGER.debug("And now is: " + toString());
+	}
+	
+	/**
+	 * Malus the current time based on the race.
+	 * The longer, the bigger the malus is !
+	 * 
+	 * @param race
+	 * @param huge
+	 */
+	public void malusIt(String race, boolean huge) {
+		
+		// FIXME quand on se sera basé sur des races, inclure ce calcul dans les races
+		int baseMS = 50;
+		
+		if (race.startsWith("100")) {
+			baseMS = 150;
+		}
+
+		if (race.startsWith("200")) {
+			baseMS = 250;
+		}
+		
+		if (race.startsWith("400")) {
+			baseMS = 500;
+		}
+		
+		if (race.startsWith("1500")) {
+			baseMS = 2500;
+		}
+		
+		if (huge)
+			baseMS *= 2;
+		
+		LOGGER.debug("Applying a malus of " + baseMS + " milliseconds.");
+		addMs(baseMS);
 	}
 }

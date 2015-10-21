@@ -74,6 +74,7 @@ public class SwimerPerformanceFactory {
 
 			// Determine if this is a female or a male
 			List<Performance> perfs = reader.readRecord(swimmer);
+			// FIXME récupérer aussi les grands bain
 			Swimmer newOne = perfs.get(0).isAWoman() ? new Nageuse(swimmer) : new Nageur(swimmer);
 
 			LOGGER.info("Got the performances ! Selecting the best one for each race...");
