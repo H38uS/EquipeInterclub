@@ -12,24 +12,23 @@ import equipesInterclub.Race;
  * @author Jordan Mosio
  * 
  */
-public abstract class Swimmer extends SportMember {
+public class Swimmer extends SportMember {
 
 	/**
-	 * Les nages du nageur, avec les points associés.
-	 * perfs, à voir.
+	 * Les nages du nageur, avec les points associés. perfs, à voir.
 	 */
 	protected final Map<Race, Integer> races = new HashMap<Race, Integer>();
 
 	/**
 	 * Le nom de famille.
 	 */
-	private final String surname;
+	protected final String surname;
 
 	/**
 	 * Le prénom.
 	 */
-	private final String name;
-	
+	protected final String name;
+
 	/**
 	 * Le hash code du nageur.
 	 */
@@ -51,6 +50,18 @@ public abstract class Swimmer extends SportMember {
 	}
 
 	/**
+	 * Class constructor.
+	 * 
+	 * @param pSurname Le nom de famille.
+	 * @param pName Le prénom.
+	 */
+	public Swimmer(final String pSurname, final String pName) {
+		surname = pSurname;
+		name = pName;
+		hash = (surname + name).hashCode();
+	}
+
+	/**
 	 * Ajoute une nage.
 	 * 
 	 * @param race La nage.
@@ -64,49 +75,53 @@ public abstract class Swimmer extends SportMember {
 	 * 
 	 * @return True ssi il s'agit d'une femme.
 	 */
-	public abstract boolean isAWoman();
+	public boolean isAWoman() {
+		return false;
+	}
 
 	/**
 	 * 
 	 * @return True ssi il s'agit d'un homme.
 	 */
-	public abstract boolean isAMan();
+	public boolean isAMan() {
+		return false;
+	}
 
-    @Override
-    public String toString() {
-	    return MessageFormat.format("{0} {1}", surname, name);
-    }
+	@Override
+	public String toString() {
+		return MessageFormat.format("{0} {1}", surname, name);
+	}
 
-    /**
-     * 
-     * @param race La nage.
-     * @return Les points que le nageur fait.
-     */
+	/**
+	 * 
+	 * @param race La nage.
+	 * @return Les points que le nageur fait.
+	 */
 	public int getPoints(Race race) {
 		if (races.containsKey(race)) {
 			return races.get(race);
 		}
-	    return 900; // valeurs par défaut
-    }
+		return 900; // valeurs par défaut
+	}
 
-    @Override
-    public int hashCode() {
-	    return hash;
-    }
+	@Override
+	public int hashCode() {
+		return hash;
+	}
 
-    /**
-     * 
-     * @return Le maximum de points que pourrait faire ce nageur.
-     */
+	/**
+	 * 
+	 * @return Le maximum de points que pourrait faire ce nageur.
+	 */
 	public int getMaxPoints() {
 		int maxPoints = 0;
 		for (Race race : races.keySet()) {
 			Integer points = races.get(race);
 			if (points > maxPoints) {
-				maxPoints = points; 
+				maxPoints = points;
 			}
 		}
-	    return maxPoints;
-    }
-	
+		return maxPoints;
+	}
+
 }

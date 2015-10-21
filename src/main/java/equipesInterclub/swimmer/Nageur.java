@@ -22,6 +22,16 @@ public class Nageur extends Swimmer {
 		super(pSurname, pName, race, points);
 	}
 
+	/**
+	 * Duplicate a swimmer without any sex to a male.
+	 * 
+	 * @param swimmer
+	 */
+	public Nageur(Swimmer swimmer) {
+		super(swimmer.surname, swimmer.name);
+		races.putAll(swimmer.races);
+	}
+
 	@Override
 	public boolean isAWoman() {
 		return false;
