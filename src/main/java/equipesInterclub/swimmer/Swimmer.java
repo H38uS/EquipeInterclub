@@ -89,6 +89,11 @@ public class Swimmer extends SportMember {
 
 	@Override
 	public String toString() {
+		return MessageFormat.format("{0} {1}", name, surname);
+	}
+
+	@Override
+	public String getFFNToString() {
 		return MessageFormat.format("{0} {1}", surname, name);
 	}
 

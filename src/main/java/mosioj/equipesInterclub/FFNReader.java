@@ -14,7 +14,7 @@ import java.util.Map;
 import org.apache.log4j.Logger;
 
 import equipesInterclub.swimmer.SportMember;
-import mosioj.equipesInterclub.swimmer.Performance;
+import mosioj.equipesInterclub.swimmer.performance.Performance;
 
 public class FFNReader {
 
@@ -39,7 +39,7 @@ public class FFNReader {
 
 		LOGGER.debug("Retrieving basic information for : " + swimmer);
 
-		URL ffn = new URL("http://ffn.extranat.fr/webffn/_recherche.php?go=ind&idrch=" + swimmer);
+		URL ffn = new URL("http://ffn.extranat.fr/webffn/_recherche.php?go=ind&idrch=" + swimmer.getFFNToString());
 		LOGGER.debug("Contacting FFN website...");
 		BufferedReader in = new BufferedReader(new InputStreamReader(ffn.openStream()));
 

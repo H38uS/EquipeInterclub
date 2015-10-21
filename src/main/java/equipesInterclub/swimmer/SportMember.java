@@ -35,4 +35,10 @@ public abstract class SportMember {
 	public String getId() {
 		return iuf;
 	}
+
+	/**
+	 * 
+	 * @return The FFN compliant version of the toString.
+	 */
+	public abstract String getFFNToString();
 }
