@@ -23,7 +23,9 @@ public class FFNReader {
 	 */
 	private static final Logger LOGGER = Logger.getLogger(FFNReader.class);
 
-	private static final String START = "Meilleures Performances Personnelles";
+	private static final String RACE_START = "<span style=\"border-bottom: 1px dotted #235991;"
+			+ " font-weight: bold; color: #235991; font-size: 10pt;\">";
+
 	private static final String PERF_START = "<tr onMouseOver=\"setPointer(this, '#FFE4C4');\" "
 			+ "onMouseOut=\"setPointer(this, '');\">";
 
@@ -68,9 +70,10 @@ public class FFNReader {
 		fillBasicInformation(swimmer);
 
 		// Getting the races
-		URL url = new URL("http://ffn.extranat.fr/webffn/nat_recherche.php?idact=nat");
 		Map<String, Object> params = new LinkedHashMap<String, Object>();
 		params.put("idrch_id", swimmer.getId());
+		params.put("idopt", "prf");
+		params.put("idbas", "25");
 
 		StringBuilder postData = new StringBuilder();
 		for (Map.Entry<String, Object> param : params.entrySet()) {
@@ -82,6 +85,7 @@ public class FFNReader {
 		}
 		byte[] postDataBytes = postData.toString().getBytes("UTF-8");
 
+		URL url = new URL("http://ffn.extranat.fr/webffn/nat_recherche.php?idact=nat");
 		HttpURLConnection conn = (HttpURLConnection) url.openConnection();
 		conn.setRequestMethod("POST");
 		conn.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
@@ -117,45 +121,31 @@ public class FFNReader {
 	 * @throws IOException
 	 */
 	private List<Performance> readLine(BufferedReader in) throws IOException {
-		
+
 		List<Performance> perfs = new ArrayList<Performance>();
 
-		// Moving forward to START
 		String line = in.readLine();
+		String race = "";
 		while (line != null) {
-			if (line.contains(START)) {
-				break;
+
+			if (line.contains(RACE_START)) {
+				line = in.readLine();
+				race = line.trim();
+				race = race.substring(0, race.indexOf(" - Bassin"));
 			}
-			line = in.readLine();
-		}
-
-		if (line == null) {
-			return perfs;
-		}
-
-		line = in.readLine();
-		while (line != null) {
 
 			// Reading a new performance
 			if (line.contains(PERF_START)) {
 
-				// First TD gives the race
-				line = in.readLine();
-				final String race = getValueInTag(line);
-
 				// Second gives the time performed
 				line = in.readLine();
-				String time = getValueInTag(line);
+				final String time = getValueInTag(line);
 
-				// Fourth gives the age
-				line = readNLines(in, 2);
-				String age = getValueInTag(line);
-
-				line = readNLines(in, 7);
+				line = readNLines(in, 9);
 				String date = getValueInTag(line);
 
-				LOGGER.debug("New Performance read !! Is: " + race + " / " + time + " / " + age + " / " + date);
-				perfs.add(new Performance(race, time, age, date));
+				LOGGER.debug("New Performance read !! Is: " + race + " / " + time + " / " + date);
+				perfs.add(new Performance(race, time, date));
 			}
 
 			line = in.readLine();
@@ -208,7 +198,7 @@ public class FFNReader {
 
 		// Skipping the ending tags
 		LOGGER.trace("Exiting ! Remaining: " + tag);
-		return tag.substring(0, tag.indexOf("<"));
+		return tag.indexOf("<") > -1 ? tag.substring(0, tag.indexOf("<")) : tag;
 	}
 
 	/**
