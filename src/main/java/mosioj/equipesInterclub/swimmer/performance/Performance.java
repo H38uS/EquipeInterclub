@@ -2,7 +2,9 @@ package mosioj.equipesInterclub.swimmer.performance;
 
 public class Performance {
 	
+	// FIXME utiliser les vraies RACE
 	public final String race;
+
 	public final Time time;
 	public final String date;
 	

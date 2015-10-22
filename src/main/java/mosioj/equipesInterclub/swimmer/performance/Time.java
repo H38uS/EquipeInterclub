@@ -97,12 +97,12 @@ public class Time {
 	 * @param baseMS
 	 */
 	public void addMs(int baseMS) {
-		LOGGER.debug("Was: " + toString());
+		LOGGER.trace("Was: " + toString());
 		Time copy = getFromLong(getAsLong() + baseMS);
 		millisecondes = copy.millisecondes;
 		secondes = copy.secondes;
 		minutes = copy.minutes;
-		LOGGER.debug("And now is: " + toString());
+		LOGGER.trace("And now is: " + toString());
 	}
 	
 	/**
