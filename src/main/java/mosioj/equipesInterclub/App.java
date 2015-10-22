@@ -1,7 +1,10 @@
-package equipesInterclub;
+package mosioj.equipesInterclub;
 
 import java.io.File;
 import java.io.IOException;
+
+import mosioj.equipesInterclub.solution.Solution;
+import mosioj.equipesInterclub.solution.SolutionBuilder;
 
 /**
  * Launcher.

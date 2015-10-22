@@ -1,11 +1,11 @@
-package equipesInterclub;
+package mosioj.equipesInterclub.tests.swimmer;
 
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
 import org.junit.Test;
 
-import equipesInterclub.swimmer.Sexe;
+import mosioj.equipesInterclub.swimmer.Sexe;
 
 public class TestSexe {
 

@@ -1,4 +1,4 @@
-package mosioj.equipesInterclub;
+package mosioj.equipesInterclub.ffn;
 
 import java.util.HashMap;
 import java.util.Map;

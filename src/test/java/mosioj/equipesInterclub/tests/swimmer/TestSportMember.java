@@ -4,8 +4,8 @@ import static org.junit.Assert.assertEquals;
 
 import org.junit.Test;
 
-import equipesInterclub.Race;
-import equipesInterclub.swimmer.Nageur;
+import mosioj.equipesInterclub.swimmer.Nageur;
+import mosioj.equipesInterclub.swimmer.Race;
 
 public class TestSportMember {
 

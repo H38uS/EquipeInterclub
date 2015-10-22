@@ -1,12 +1,13 @@
-package equipesInterclub;
+package mosioj.equipesInterclub.solution;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import equipesInterclub.swimmer.Nageur;
-import equipesInterclub.swimmer.Nageuse;
-import equipesInterclub.swimmer.Sexe;
-import equipesInterclub.swimmer.Swimmer;
+import mosioj.equipesInterclub.swimmer.Nageur;
+import mosioj.equipesInterclub.swimmer.Nageuse;
+import mosioj.equipesInterclub.swimmer.Race;
+import mosioj.equipesInterclub.swimmer.Sexe;
+import mosioj.equipesInterclub.swimmer.Swimmer;
 
 /**
  * Crée les différentes données du problème depuis le Excel.

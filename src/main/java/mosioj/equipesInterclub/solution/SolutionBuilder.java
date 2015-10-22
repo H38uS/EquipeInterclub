@@ -1,4 +1,4 @@
-package equipesInterclub;
+package mosioj.equipesInterclub.solution;
 
 import java.io.File;
 import java.text.MessageFormat;
@@ -8,8 +8,8 @@ import java.util.Set;
 
 import org.apache.log4j.Logger;
 
-import equipesInterclub.swimmer.Swimmer;
-import equipesInterclub.util.ExcelReader;
+import mosioj.equipesInterclub.swimmer.Swimmer;
+import mosioj.equipesInterclub.util.ExcelReader;
 
 /**
  * Construit la meilleure solution !!!

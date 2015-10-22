@@ -1,10 +1,8 @@
-package equipesInterclub.swimmer;
+package mosioj.equipesInterclub.swimmer;
 
 import java.text.MessageFormat;
 import java.util.HashMap;
 import java.util.Map;
-
-import equipesInterclub.Race;
 
 /**
  * Un nageur, avec les courses qu'il peut faire (et ses points).

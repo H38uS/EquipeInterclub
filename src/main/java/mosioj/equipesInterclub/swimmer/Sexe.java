@@ -1,4 +1,4 @@
-package equipesInterclub.swimmer;
+package mosioj.equipesInterclub.swimmer;
 
 /**
  * Le sexe du nageur.

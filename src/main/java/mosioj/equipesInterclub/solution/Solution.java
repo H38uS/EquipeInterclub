@@ -1,4 +1,4 @@
-package equipesInterclub;
+package mosioj.equipesInterclub.solution;
 
 import java.text.MessageFormat;
 import java.util.ArrayList;
@@ -7,7 +7,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import equipesInterclub.swimmer.Swimmer;
+import mosioj.equipesInterclub.swimmer.Race;
+import mosioj.equipesInterclub.swimmer.Swimmer;
 
 /**
  * Une solution à ce problème.

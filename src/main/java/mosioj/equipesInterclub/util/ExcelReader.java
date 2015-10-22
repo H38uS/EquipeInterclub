@@ -1,4 +1,4 @@
-package equipesInterclub.util;
+package mosioj.equipesInterclub.util;
 
 import java.io.File;
 import java.io.FileInputStream;

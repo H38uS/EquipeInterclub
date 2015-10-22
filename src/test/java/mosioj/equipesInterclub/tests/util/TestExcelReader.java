@@ -1,4 +1,4 @@
-package equipesInterclub.Util;
+package mosioj.equipesInterclub.tests.util;
 
 import static org.junit.Assert.assertEquals;
 
@@ -8,7 +8,7 @@ import java.util.List;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import equipesInterclub.util.ExcelReader;
+import mosioj.equipesInterclub.util.ExcelReader;
 
 public class TestExcelReader {
 

@@ -1,6 +1,4 @@
-package equipesInterclub.swimmer;
-
-import equipesInterclub.Race;
+package mosioj.equipesInterclub.swimmer;
 
 /**
  * Un nageur.

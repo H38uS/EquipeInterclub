@@ -5,7 +5,7 @@ import static org.junit.Assert.fail;
 
 import org.junit.Test;
 
-import mosioj.equipesInterclub.FFNReader;
+import mosioj.equipesInterclub.ffn.FFNReader;
 
 public class TestFFNReader {
 

@@ -6,7 +6,7 @@ import java.util.Map;
 
 import org.junit.Test;
 
-import mosioj.equipesInterclub.JSonReader;
+import mosioj.equipesInterclub.ffn.JSonReader;
 
 public class TestJSonReader {
 

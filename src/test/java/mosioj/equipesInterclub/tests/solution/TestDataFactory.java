@@ -1,4 +1,4 @@
-package equipesInterclub;
+package mosioj.equipesInterclub.tests.solution;
 
 import static org.junit.Assert.assertEquals;
 
@@ -7,8 +7,9 @@ import java.util.List;
 
 import org.junit.Test;
 
-import equipesInterclub.swimmer.Swimmer;
-import equipesInterclub.util.ExcelReader;
+import mosioj.equipesInterclub.solution.DataFactory;
+import mosioj.equipesInterclub.swimmer.Swimmer;
+import mosioj.equipesInterclub.util.ExcelReader;
 
 public class TestDataFactory {
 

@@ -1,4 +1,4 @@
-package mosioj.equipesInterclub;
+package mosioj.equipesInterclub.ffn;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -13,7 +13,7 @@ import java.util.Map;
 
 import org.apache.log4j.Logger;
 
-import equipesInterclub.swimmer.SportMember;
+import mosioj.equipesInterclub.swimmer.SportMember;
 import mosioj.equipesInterclub.swimmer.performance.Performance;
 
 public class FFNReader {

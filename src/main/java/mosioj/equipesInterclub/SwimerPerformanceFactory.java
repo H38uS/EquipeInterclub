@@ -19,12 +19,13 @@ import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
-import equipesInterclub.swimmer.Nageur;
-import equipesInterclub.swimmer.Nageuse;
-import equipesInterclub.swimmer.Swimmer;
-import equipesInterclub.util.ExcelReader;
+import mosioj.equipesInterclub.ffn.FFNReader;
+import mosioj.equipesInterclub.swimmer.Nageur;
+import mosioj.equipesInterclub.swimmer.Nageuse;
+import mosioj.equipesInterclub.swimmer.Swimmer;
 import mosioj.equipesInterclub.swimmer.performance.PerfChooser;
 import mosioj.equipesInterclub.swimmer.performance.Performance;
+import mosioj.equipesInterclub.util.ExcelReader;
 
 public class SwimerPerformanceFactory {
 

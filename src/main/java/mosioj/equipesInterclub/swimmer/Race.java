@@ -1,4 +1,4 @@
-package equipesInterclub;
+package mosioj.equipesInterclub.swimmer;
 
 /**
  * Une nage.
