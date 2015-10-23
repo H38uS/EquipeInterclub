@@ -76,7 +76,8 @@ public class SwimerPerformanceFactory {
 			// Determine if this is a female or a male
 			List<Performance> perfs = reader.readRecord(swimmer);
 			// FIXME récupérer aussi les grands bain
-			Swimmer newOne = perfs.get(0).isAWoman() ? new Nageuse(swimmer) : new Nageur(swimmer);
+			// TODO appliquer un bonus au grand bain (le même que le malus ?)
+			Swimmer newOne = perfs.get(0).isAWoman ? new Nageuse(swimmer) : new Nageur(swimmer);
 
 			LOGGER.info("Got the performances ! Selecting the best one for each race...");
 			PerfChooser chooser = new PerfChooser(perfs);
@@ -128,16 +129,16 @@ public class SwimerPerformanceFactory {
 				// Nom / Prénom si c'est la première ligne du nageur
 				Cell cell = row.createCell(cellnum++);
 				if (firstPerf) {
-					cell.setCellValue(swimmer.toString());
+					cell.setCellValue(swimmer.surname);
 				}
 				cell = row.createCell(cellnum++);
 				if (firstPerf) {
-					cell.setCellValue(swimmer.toString());
+					cell.setCellValue(swimmer.name);
 				}
 				
 				// The performances
 				cell = row.createCell(cellnum++);
-				cell.setCellValue(perf.race);
+				cell.setCellValue(perf.race.toString());
 				
 				// Leave one cell empty for points
 				cell = row.createCell(cellnum++);
@@ -145,7 +146,7 @@ public class SwimerPerformanceFactory {
 				// The male / female attribute
 				cell = row.createCell(cellnum++);
 				if (firstPerf) {
-					cell.setCellValue(perf.isAWoman() ? "F" : "H");
+					cell.setCellValue(perf.isAWoman ? "F" : "H");
 				}
 
 				// The time of the performance

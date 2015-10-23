@@ -92,7 +92,10 @@ public class Swimmer extends SportMember {
 
 	@Override
 	public String getFFNToString() {
-		return MessageFormat.format("{0} {1}", surname, name);
+		String escapedName = name;
+		if (name.indexOf("è") >= 0)
+			escapedName = name.substring(0, name.indexOf("è"));
+		return MessageFormat.format("{0}%20{1}", surname, escapedName);
 	}
 
 	/**
