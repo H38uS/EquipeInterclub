@@ -35,7 +35,7 @@ public class FFNReader {
 	 * @param swimmer
 	 * @throws IOException
 	 */
-	private void fillBasicInformation(SportMember swimmer) throws IOException {
+	public String getAndFillBasicInformation(SportMember swimmer) throws IOException {
 
 		LOGGER.debug("Retrieving basic information for : " + swimmer);
 
@@ -48,7 +48,7 @@ public class FFNReader {
 		JSonReader reader = new JSonReader(inputLine);
 		Map<String, String> answer = reader.readIt();
 
-		swimmer.setInformation(answer.get("iuf"), answer.get("ind"));
+		swimmer.setInformation(answer.get("ind"));
 
 		if (in.readLine() != null) {
 			LOGGER.error("Two many result found. Considering only the first one.");
@@ -56,24 +56,24 @@ public class FFNReader {
 		}
 
 		in.close();
+		return answer.get("iuf");
 	}
 
 	/**
 	 * 
 	 * @param swimmer
+	 * @param pIUF
+	 * @param bigPool
 	 * @return The list of performances found for this swimmer.
 	 * @throws IOException
 	 */
-	public List<Performance> readRecord(SportMember swimmer) throws IOException {
-
-		// Retrieving basic information
-		fillBasicInformation(swimmer);
+	public List<Performance> readRecord(SportMember swimmer, String pIUF, boolean bigPool) throws IOException {
 
 		// Getting the races
 		Map<String, Object> params = new LinkedHashMap<String, Object>();
-		params.put("idrch_id", swimmer.getId());
+		params.put("idrch_id", pIUF);
 		params.put("idopt", "prf");
-		params.put("idbas", "25");
+		params.put("idbas", bigPool ? "50" : "25");
 
 		StringBuilder postData = new StringBuilder();
 		for (Map.Entry<String, Object> param : params.entrySet()) {

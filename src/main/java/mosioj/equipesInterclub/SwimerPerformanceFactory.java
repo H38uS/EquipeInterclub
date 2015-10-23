@@ -24,6 +24,7 @@ import mosioj.equipesInterclub.swimmer.Nageur;
 import mosioj.equipesInterclub.swimmer.Nageuse;
 import mosioj.equipesInterclub.swimmer.Swimmer;
 import mosioj.equipesInterclub.swimmer.performance.PerfChooser;
+import mosioj.equipesInterclub.swimmer.performance.PerfRaceComparator;
 import mosioj.equipesInterclub.swimmer.performance.Performance;
 import mosioj.equipesInterclub.util.ExcelReader;
 
@@ -72,12 +73,23 @@ public class SwimerPerformanceFactory {
 		for (Swimmer swimmer : swimmers) {
 
 			LOGGER.info(MessageFormat.format("Reading performances of \"{0}\" on the FFN Website...", swimmer));
+			String iuf = reader.getAndFillBasicInformation(swimmer);
 
+			// Get 25m performances
+			LOGGER.info("Reading 25m pool performances...");
+			List<Performance> perfs = reader.readRecord(swimmer, iuf, false);
+			
 			// Determine if this is a female or a male
-			List<Performance> perfs = reader.readRecord(swimmer);
-			// FIXME récupérer aussi les grands bain
-			// TODO appliquer un bonus au grand bain (le même que le malus ?)
-			Swimmer newOne = perfs.get(0).isAWoman ? new Nageuse(swimmer) : new Nageur(swimmer);
+			final Swimmer newOne = perfs.get(0).isAWoman ? new Nageuse(swimmer) : new Nageur(swimmer);
+
+			LOGGER.info("Reading 50m pool performances...");
+			List<Performance> perfs50 = reader.readRecord(swimmer, iuf, true);
+			for (Performance perf : perfs50) {
+				perf.bonusIt(false);
+			}
+
+			perfs.addAll(perfs50);
+			perfs.sort(new PerfRaceComparator());
 
 			LOGGER.info("Got the performances ! Selecting the best one for each race...");
 			PerfChooser chooser = new PerfChooser(perfs);

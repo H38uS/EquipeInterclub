@@ -35,4 +35,19 @@ public class Performance {
 		isAWoman = pIsWoman;
 	}
 
+	/**
+	 * Apply a malus on this performance.
+	 * 
+	 * @param huge
+	 */
+	public void bonusIt(boolean huge) {
+		if (race != null)
+			time.bonusIt(race, huge);
+	}
+
+	@Override
+	public String toString() {
+		return race + ": " + time + " (" + date + ")";
+	}
+	
 }

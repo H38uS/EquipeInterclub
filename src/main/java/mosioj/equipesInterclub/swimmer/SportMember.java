@@ -3,11 +3,6 @@ package mosioj.equipesInterclub.swimmer;
 public abstract class SportMember {
 	
 	/**
-	 * Federal identifier.
-	 */
-	private String iuf;
-
-	/**
 	 * Member year of birth.
 	 */
 	protected int birthYear;
@@ -15,12 +10,9 @@ public abstract class SportMember {
 	/**
 	 * Reads information provided.
 	 * 
-	 * @param piuf
 	 * @param ind
 	 */
-	public void setInformation(String piuf, String ind) {
-
-		iuf = piuf;
+	public void setInformation(String ind) {
 		
 		int firstIndex = ind.indexOf("(");
 		int lastIndex = ind.indexOf(")");
@@ -28,14 +20,6 @@ public abstract class SportMember {
 		birthYear = Integer.valueOf(ind.substring(firstIndex + 1, lastIndex));
 	}
 	
-	/**
-	 * 
-	 * @return The FFN id of this swimmer.
-	 */
-	public String getId() {
-		return iuf;
-	}
-
 	/**
 	 * 
 	 * @return The FFN compliant version of the toString.

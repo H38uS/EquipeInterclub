@@ -107,7 +107,7 @@ public class Swimmer extends SportMember {
 		if (races.containsKey(race)) {
 			return races.get(race);
 		}
-		return 900; // valeurs par défaut
+		return 900; // valeur par défaut
 	}
 
 	@Override

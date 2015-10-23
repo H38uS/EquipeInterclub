@@ -89,6 +89,7 @@ public class PerfChooser {
 	private Time average(List<Performance> perfs) {
 
 		long total = 0;
+		LOGGER.debug("List: " + perfs);
 		for (Performance perf : perfs) {
 			total += perf.time.getAsLong();
 		}
@@ -97,6 +98,11 @@ public class PerfChooser {
 		return Time.getFromLong(total);
 	}
 
+	/**
+	 * 
+	 * @param perfs
+	 * @return The time that the swimmer is likely to do with the given performances.
+	 */
 	private Performance getRelevantPerf(List<Performance> perfs) {
 
 		Performance first = perfs.get(0);
@@ -120,13 +126,14 @@ public class PerfChooser {
 		// First try : keeping only two most recent season
 		List<Performance> filteredPerfs = new ArrayList<Performance>();
 		for (Performance perf : perfs) {
-			if (getSeasonYear(perf.date) > max - 2)
+			if (getSeasonYear(perf.date) > max - 3)
 				filteredPerfs.add(perf);
 		}
 
 		// Making the mean of it
 		LOGGER.debug("Taking the mean of " + filteredPerfs.size() + " values...");
 		Time time = average(filteredPerfs);
+		LOGGER.debug("Mean is: " + time);
 
 		// Malus
 		if (max == thisSeason - 2) {
@@ -144,6 +151,8 @@ public class PerfChooser {
 			time.malusIt(race, false);
 		}
 
+		LOGGER.debug("Final score is: " + time);
+		
 		return new Performance(race, time, null, first.isAWoman);
 	}
 }

@@ -13,7 +13,7 @@ public class TestSportMember {
 	public void test() {
 		
 		TestNageurInstance member = new TestNageurInstance("mosio", "jtt", null, 0);
-		member.setInformation("354292", "MOSIO Jordan (1989) FRA");
+		member.setInformation("MOSIO Jordan (1989) FRA");
 		
 		assertEquals(1989, member.getBirthYear());
 	}

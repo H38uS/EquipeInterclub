@@ -10,7 +10,7 @@ import mosioj.equipesInterclub.swimmer.Race;
  * @author Jordan Mosio
  *
  */
-public class Time {
+public class Time implements Comparable<Time> {
 
 	/**
 	 * Class logger.
@@ -92,7 +92,7 @@ public class Time {
 	public static Time getFromLong(long ms) {
 		return new Time((int) (ms / 100 / 60), (int) (ms / 100 % 60), (int) (ms % 100));
 	}
-	
+
 	/**
 	 * Adds the given amount of millisecond to the current time.
 	 * 
@@ -106,21 +106,66 @@ public class Time {
 		minutes = copy.minutes;
 		LOGGER.trace("And now is: " + toString());
 	}
-	
+
 	/**
-	 * Malus the current time based on the race.
-	 * The longer, the bigger the malus is !
+	 * Malus the current time based on the race. The longer, the bigger the malus is !
 	 * 
 	 * @param race
 	 * @param huge
 	 */
 	public void malusIt(Race race, boolean huge) {
-		
-		int baseMS = race.getMalus();		
+
+		int baseMS = race.getMalus();
 		if (huge)
 			baseMS *= 2;
-		
-		LOGGER.debug("Applying a malus of " + baseMS + " milliseconds.");
+
+		LOGGER.trace("Applying a malus of " + baseMS + " milliseconds.");
 		addMs(baseMS);
+	}
+
+	/**
+	 * Bonus the current time based on the race. The longer, the bigger the bonus is !
+	 * 
+	 * @param race
+	 * @param huge
+	 */
+	public void bonusIt(Race race, boolean huge) {
+
+		int baseMS = race.getMalus();
+		if (huge)
+			baseMS *= 2;
+
+		LOGGER.trace("Applying a bonus of " + baseMS + " milliseconds.");
+		addMs(-baseMS);
+	}
+
+	/**
+	 * 
+	 */
+	public int compareTo(Time o) {
+
+		if (minutes < o.minutes)
+			return -1;
+
+		if (minutes > o.minutes)
+			return 1;
+
+		// Minutes égales
+
+		if (secondes < o.secondes)
+			return -1;
+
+		if (secondes > o.secondes)
+			return 1;
+
+		// Secondes égales
+
+		if (millisecondes < o.millisecondes)
+			return -1;
+
+		if (millisecondes > o.millisecondes)
+			return 1;
+
+		return 0;
 	}
 }
