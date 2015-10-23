@@ -7,6 +7,8 @@ import java.util.List;
 
 import org.apache.log4j.Logger;
 
+import mosioj.equipesInterclub.swimmer.Race;
+
 public class PerfChooser {
 
 	/**
@@ -27,7 +29,7 @@ public class PerfChooser {
 	public PerfChooser(List<Performance> perfs) {
 
 		performances = new ArrayList<List<Performance>>();
-		String race = null;
+		Race race = null;
 
 		// Initialization
 		List<Performance> current = new ArrayList<Performance>();
@@ -60,7 +62,8 @@ public class PerfChooser {
 		List<Performance> result = new ArrayList<Performance>();
 		for (List<Performance> perfs : performances) {
 			Performance theOne = getRelevantPerf(perfs);
-			result.add(theOne);
+			if (theOne != null)
+				result.add(theOne);
 		}
 
 		return result;
@@ -97,7 +100,11 @@ public class PerfChooser {
 	private Performance getRelevantPerf(List<Performance> perfs) {
 
 		Performance first = perfs.get(0);
-		String race = first.race;
+		Race race = first.race;
+		if (race == null) {
+			LOGGER.debug("Race is null, skipping those performances.");
+			return null;
+		}
 		LOGGER.info("Processing race " + race + "...");
 		SimpleDateFormat sdf = new SimpleDateFormat("DD/MM/YYYY");
 		final int thisSeason = getSeasonYear(sdf.format(new Date()));
@@ -137,6 +144,6 @@ public class PerfChooser {
 			time.malusIt(race, false);
 		}
 
-		return new Performance(race, time, null);
+		return new Performance(race, time, null, first.isAWoman);
 	}
 }

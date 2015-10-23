@@ -1,12 +1,13 @@
 package mosioj.equipesInterclub.swimmer.performance;
 
+import mosioj.equipesInterclub.swimmer.Race;
+
 public class Performance {
 	
-	// FIXME utiliser les vraies RACE
-	public final String race;
-
+	public final Race race;
 	public final Time time;
 	public final String date;
+	public final boolean isAWoman;
 	
 
 	/**
@@ -17,7 +18,7 @@ public class Performance {
 	 * @param pDate
 	 */
 	public Performance(String pRace, String pTime, String pDate) {
-		this(pRace, new Time(pTime), pDate);
+		this(Race.getRace(pRace), new Time(pTime), pDate, !pRace.endsWith("Messieurs"));
 	}
 
 	/**
@@ -27,18 +28,11 @@ public class Performance {
 	 * @param pTime
 	 * @param pDate
 	 */
-	public Performance(String pRace, Time pTime, String pDate) {
+	public Performance(Race pRace, Time pTime, String pDate, boolean pIsWoman) {
 		race = pRace;
 		time = pTime;
 		date = pDate;
+		isAWoman = pIsWoman;
 	}
 
-	/**
-	 * 
-	 * @return True if and only if this is a woman performances.
-	 */
-	public boolean isAWoman() {
-		return true; // FIXME fill this
-	}
-	
 }

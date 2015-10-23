@@ -2,6 +2,8 @@ package mosioj.equipesInterclub.swimmer.performance;
 
 import org.apache.log4j.Logger;
 
+import mosioj.equipesInterclub.swimmer.Race;
+
 /**
  * The time of a race made by a swimmer.
  * 
@@ -112,27 +114,9 @@ public class Time {
 	 * @param race
 	 * @param huge
 	 */
-	public void malusIt(String race, boolean huge) {
+	public void malusIt(Race race, boolean huge) {
 		
-		// FIXME quand on se sera basé sur des races, inclure ce calcul dans les races
-		int baseMS = 50;
-		
-		if (race.startsWith("100")) {
-			baseMS = 150;
-		}
-
-		if (race.startsWith("200")) {
-			baseMS = 250;
-		}
-		
-		if (race.startsWith("400")) {
-			baseMS = 500;
-		}
-		
-		if (race.startsWith("1500")) {
-			baseMS = 2500;
-		}
-		
+		int baseMS = race.getMalus();		
 		if (huge)
 			baseMS *= 2;
 		

@@ -20,12 +20,12 @@ public class Swimmer extends SportMember {
 	/**
 	 * Le nom de famille.
 	 */
-	protected final String surname;
+	public final String surname;
 
 	/**
 	 * Le prénom.
 	 */
-	protected final String name;
+	public final String name;
 
 	/**
 	 * Le hash code du nageur.
