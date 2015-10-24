@@ -57,7 +57,7 @@ public class SolutionBuilder {
 	 */
 	public SolutionBuilder(final File data) throws Exception {
 		LOGGER.info("Construction de la solution initiale...");
-		swimmers = DataFactory.getSwimmers(ExcelReader.readLines(data));
+		swimmers = DataFactory.getSwimmers(ExcelReader.readLines(data, "Feuil1"));
 		bestSolution = new Solution(swimmers);
 		LOGGER.info("Ok. Solution initiale: ");
 		bestSolution.print(swimmers);

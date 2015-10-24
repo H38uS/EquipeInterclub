@@ -189,7 +189,7 @@ public class SwimerPerformanceFactory {
 		}
 		LOGGER.info("Parsing " + input.getAbsolutePath());
 
-		List<List<String>> lines = ExcelReader.readLines(input);
+		List<List<String>> lines = ExcelReader.readLines(input, "Feuil1");
 		int index = 0;
 		for (List<String> line : lines) {
 

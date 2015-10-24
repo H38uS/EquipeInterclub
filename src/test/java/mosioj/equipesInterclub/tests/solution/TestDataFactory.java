@@ -16,7 +16,7 @@ public class TestDataFactory {
 	@Test
 	public void test() throws Exception {
 		File root = new File(getClass().getResource("/").getFile());
-		List<List<String>> lines = ExcelReader.readLines(new File(root, "POINTS NAGEURS.xls"));
+		List<List<String>> lines = ExcelReader.readLines(new File(root, "POINTS NAGEURS.xls"), "Feuil1");
 		List<Swimmer> swimmers = DataFactory.getSwimmers(lines);
 		assertEquals(16, swimmers.size());
 	}

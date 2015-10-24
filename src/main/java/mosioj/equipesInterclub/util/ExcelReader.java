@@ -38,10 +38,11 @@ public final class ExcelReader {
 	/**
 	 * 
 	 * @param file Le fichier à lire.
+	 * @param sheetName The sheet name.
 	 * @return La liste des lignes lues.
 	 * @throws Exception Si le fichier n'existe pas.
 	 */
-	public static List<List<String>> readLines(File file) throws Exception {
+	public static List<List<String>> readLines(File file, String sheetName) throws Exception {
 
 		LOGGER.debug(MessageFormat.format("Reading file {0}...", file));
 		List<List<String>> result = new ArrayList<List<String>>();
@@ -60,7 +61,7 @@ public final class ExcelReader {
 		}
 
 		// On récupère la sheet
-		Sheet sheet = wb.getSheetAt(0);
+		Sheet sheet = wb.getSheet(sheetName);
 
 		// every sheet has rows, iterate over them
 		Iterator<Row> rowIterator = sheet.iterator();

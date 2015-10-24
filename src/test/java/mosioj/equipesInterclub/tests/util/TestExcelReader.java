@@ -23,7 +23,7 @@ public class TestExcelReader {
 		Object o = new Object();
 		File root = new File(o.getClass().getResource("/").getFile());
 		File file = new File(root, "POINTS NAGEURS.xls");
-		testResults = ExcelReader.readLines(file);
+		testResults = ExcelReader.readLines(file, "Feuil1");
 	}
 
 	/**
