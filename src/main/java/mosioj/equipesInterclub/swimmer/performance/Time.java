@@ -168,4 +168,19 @@ public class Time implements Comparable<Time> {
 
 		return 0;
 	}
+
+	@Override
+	public boolean equals(Object obj) {
+
+		if (obj == null)
+			return false;
+
+		if (!(obj instanceof Time))
+			return false;
+
+		Time other = (Time) obj;
+
+		return minutes == other.minutes && secondes == other.secondes && millisecondes == other.millisecondes;
+	}
+
 }
