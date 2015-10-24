@@ -86,7 +86,7 @@ public class PerfChooser {
 	 * @param perfs
 	 * @return The average time of those performances.
 	 */
-	private Time average(List<Performance> perfs) {
+	public Time average(List<Performance> perfs) {
 
 		long total = 0;
 		LOGGER.debug("List: " + perfs);
