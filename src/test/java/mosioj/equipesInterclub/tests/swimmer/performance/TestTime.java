@@ -25,4 +25,14 @@ public class TestTime {
 		assertEquals(12517, time.getAsLong());
 	}
 
+	@Test
+	public void malusBonusTest() {
+		Time time = new Time("1:32.00");
+		time.addMs(1);
+		assertEquals(9201, time.getAsLong());
+		
+		time = new Time("5.17");
+		time.addMs(-17);
+		assertEquals(500, time.getAsLong());
+	}
 }
