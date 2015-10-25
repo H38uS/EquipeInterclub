@@ -2,6 +2,7 @@ package mosioj.equipesInterclub.solution;
 
 import java.io.File;
 import java.text.MessageFormat;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -28,6 +29,16 @@ public class TimeToPointsConverter {
 	private final Map<CoefficientKey, Double> coeffMap = new HashMap<TimeToPointsConverter.CoefficientKey, Double>();
 
 	/**
+	 * The association between the integer and the race / sex.
+	 */
+	private final Map<Integer, SwimCodeValue> swimCodes = new HashMap<Integer, TimeToPointsConverter.SwimCodeValue>();
+
+	/**
+	 * Association between the race/sex and the list of time.
+	 */
+	private final Map<SwimCodeValue, List<Time>> pointsRows = new HashMap<SwimCodeValue, List<Time>>();
+
+	/**
 	 * Class constructor.
 	 */
 	public TimeToPointsConverter() {
@@ -39,9 +50,61 @@ public class TimeToPointsConverter {
 			List<List<String>> coeffs = ExcelReader.readLines(file, "Coefficients");
 			readCoefficients(coeffs);
 
+			LOGGER.info("Reading the cotation table...");
+			List<List<String>> points = ExcelReader.readLines(file, "Table");
+			readPoints(points);
+
 		} catch (Exception e) {
 			e.printStackTrace();
 			throw new IllegalStateException("Fail while reading Excel file...");
+		}
+	}
+
+	/**
+	 * Reads the cotation table.
+	 * 
+	 * @param data
+	 */
+	private void readPoints(List<List<String>> data) {
+
+		// First, transpose it for facility of use
+		List<List<String>> points = ExcelReader.transpose(data);
+
+		for (List<String> line : points) {
+
+			LOGGER.trace(line);
+
+			if (line.size() < 19) {
+				LOGGER.debug("Not a valid row (not enough data)... Skipping it. Row: " + line);
+				continue;
+			}
+
+			double id = Double.parseDouble(line.get(0));
+			SwimCodeValue code = swimCodes.get((int) Math.round(id));
+			LOGGER.trace("Code: " + code);
+
+			if (code == null) {
+				LOGGER.debug("Invalid race, unknown code. Row is: " + line);
+				continue;
+			}
+
+			List<Time> times = new ArrayList<Time>();
+			line.remove(0);
+			for (String time : line) {
+				// Read as is
+				double timeAsDble = Double.parseDouble(time);
+				
+				// partie entière
+				long minutes = (long) Math.floor(timeAsDble);
+
+				// Secondes + centieme en centieme
+				long millisecondes = (long) ((timeAsDble - minutes) * 100 * 100);
+				
+				long realTime = (minutes * 60 * 100) + millisecondes;
+				times.add(Time.getFromLong(realTime));
+			}
+			LOGGER.debug("Times found for " + code + ": " + times);
+			pointsRows.put(code, times);
 		}
 	}
 
@@ -63,7 +126,14 @@ public class TimeToPointsConverter {
 			LOGGER.debug("Not a performance row (null race)... Skipping it. Row: " + line);
 			return;
 		}
-		String raceToParse = fullRaceInfo.trim().substring(2).trim();
+
+		String raceToParse = fullRaceInfo.trim();
+
+		// Get the race integer
+		final String id = raceToParse.substring(0, 2);
+		LOGGER.trace("Race id: " + id);
+
+		raceToParse = raceToParse.substring(2).trim();
 		raceToParse = raceToParse.replaceAll(" ", "");
 		if (raceToParse.length() < 7) {
 			LOGGER.debug("Not a performance row (too short code)... Skipping it. Row: " + line);
@@ -87,6 +157,9 @@ public class TimeToPointsConverter {
 			CoefficientKey key = new CoefficientKey(race, values[i], isWoman, false);
 			coeffMap.put(key, Double.parseDouble(line.get(i + 3)));
 		}
+
+		// Registering the race
+		swimCodes.put((int) Math.round(Double.parseDouble(id)), new SwimCodeValue(race, isWoman));
 	}
 
 	/**
@@ -109,7 +182,7 @@ public class TimeToPointsConverter {
 			LOGGER.debug("Not a performance row (not a valid race)... Skipping it. Row: " + line);
 			return;
 		}
-		
+
 		// Adding new values to the map
 		Category[] values = Category.values();
 		for (int i = 0; i < values.length; i++) {
@@ -173,7 +246,23 @@ public class TimeToPointsConverter {
 	 * @return The number of points of points for this time on this race, for this category/sex and relay mode or not.
 	 */
 	public int getPoints(Race race, Time time, Category category, boolean isWoman, boolean isRelay) {
-		return 900;
+
+		// Get the coefficient
+		double coeff = getCoefficient(race, category, isWoman, isRelay);
+		LOGGER.trace("Before was: " + time);
+		Time adjusted = Time.getFromLong(Math.round(time.getAsLong() / coeff));
+		LOGGER.trace("After applying coefficient: " + adjusted);
+
+		SwimCodeValue code = new SwimCodeValue(race, isWoman);
+		List<Time> times = pointsRows.get(code);
+		LOGGER.trace(code);
+		for (int i = 0; i < times.size(); i++) {
+			if (adjusted.compareTo(times.get(i)) <= 0) {
+				return 1501 - i;
+			}
+		}
+
+		return -1;
 	}
 
 	/**
@@ -201,6 +290,49 @@ public class TimeToPointsConverter {
 		}
 
 		return res;
+	}
+
+	private class SwimCodeValue {
+
+		private final Race race;
+		private final boolean isWoman;
+
+		public SwimCodeValue(Race pRace, boolean pIsWoman) {
+			race = pRace;
+			isWoman = pIsWoman;
+		}
+
+		@Override
+		public boolean equals(Object other) {
+			
+			if (other == null || !(other instanceof SwimCodeValue)) {
+				return false;
+			}
+
+			SwimCodeValue oth = (SwimCodeValue) other;
+			if (isWoman && !oth.isWoman) {
+				return false;
+			}
+			if (!isWoman && oth.isWoman) {
+				return false;
+			}
+
+			return race.equals(oth.race);
+		}
+
+		@Override
+		public int hashCode() {
+			int base = race.hashCode();
+			if (isWoman)
+				base += 2;
+			return base;
+		}
+
+		@Override
+		public String toString() {
+			return MessageFormat.format("[Race:{0}|isWoman:{1}]", race, isWoman);
+		}
+
 	}
 
 	private class CoefficientKey {

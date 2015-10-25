@@ -114,4 +114,28 @@ public final class ExcelReader {
 
 		return result;
 	}
+	
+	/**
+	 * Converts rows into columns, and columns into rows.
+	 * 
+	 * @param initial
+	 * @return
+	 */
+	public static List<List<String>> transpose(List<List<String>> initial) {
+
+		List<List<String>> res = new ArrayList<List<String>>();
+		// Initialization
+		for (int col = 0; col < initial.get(0).size(); col++) {
+			res.add(new ArrayList<String>());
+		}
+		
+		for (List<String> row : initial) {
+			for (int col = 0; col < row.size(); col++) {
+				List<String> current = res.get(col);
+				current.add(row.get(col));
+			}
+		}
+		
+		return res;
+	}
 }
