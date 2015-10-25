@@ -65,6 +65,9 @@ public enum Race {
 			if (value.startsWith(race.defaultRepresentation)) {
 				return race;
 			}
+			if (race.name().startsWith("_" + value.toUpperCase())) {
+				return race;
+			}
 		}
 		
 		return null;

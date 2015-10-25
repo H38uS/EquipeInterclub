@@ -87,7 +87,24 @@ public final class ExcelReader {
 					line.add(cell.getStringCellValue());
 					break;
 				case Cell.CELL_TYPE_NUMERIC:
-					line.add(String.valueOf(Math.round(cell.getNumericCellValue())));
+					line.add(cell.getNumericCellValue() + "");
+					break;
+				case Cell.CELL_TYPE_FORMULA:
+					String value = "";
+					switch (cell.getCachedFormulaResultType()) {
+					case Cell.CELL_TYPE_NUMERIC:
+						value = cell.getNumericCellValue() + "";
+						break;
+					case Cell.CELL_TYPE_STRING:
+						value = cell.getRichStringCellValue().getString();
+						break;
+					default:
+						throw new Exception("Unsupported data type: " + cell.getCachedFormulaResultType());
+					}
+					line.add(value);
+					break;
+				case Cell.CELL_TYPE_BLANK:
+					line.add(null);
 					break;
 				default:
 					throw new Exception("Unsupported data type: " + cell.getCellType());
