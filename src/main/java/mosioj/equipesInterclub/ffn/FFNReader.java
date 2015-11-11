@@ -39,7 +39,9 @@ public class FFNReader {
 
 		LOGGER.debug("Retrieving basic information for : " + swimmer);
 
-		URL ffn = new URL("http://ffn.extranat.fr/webffn/_recherche.php?go=ind&idrch=" + swimmer.getFFNToString());
+		String searchString = swimmer.getFFNToString();
+		LOGGER.debug("Using search string: \"" + searchString + "\"");
+		URL ffn = new URL("http://ffn.extranat.fr/webffn/_recherche.php?go=ind&idrch=" + searchString);
 		LOGGER.debug("Contacting FFN website...");
 		BufferedReader in = new BufferedReader(new InputStreamReader(ffn.openStream()));
 

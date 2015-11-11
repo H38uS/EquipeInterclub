@@ -52,14 +52,14 @@ public class Swimmer extends SportMember {
 	 * @param pName Le prénom.
 	 */
 	public Swimmer(final String pSurname, final String pName) {
-		
+
 		if (pSurname == null || pSurname.isEmpty()) {
 			throw new IllegalStateException("Le nom de famille ne peut pas être null !");
 		}
 		if (pName == null || pName.isEmpty()) {
 			throw new IllegalStateException("Le prénom ne peut pas être null !");
 		}
-		
+
 		surname = pSurname;
 		name = pName;
 		hash = (surname + name).hashCode();
@@ -102,7 +102,9 @@ public class Swimmer extends SportMember {
 		escapedName = escapedName.replaceAll("è", "e");
 		escapedName = escapedName.replaceAll("é", "e");
 		escapedName = escapedName.replaceAll("ï", "i");
-		String escapedSurname = surname.replaceAll("é", "e");
+		String escapedSurname = surname;
+		escapedSurname = escapedSurname.replaceAll("é", "e");
+		escapedSurname = escapedSurname.replaceAll(" ", "%20");
 		return MessageFormat.format("{0}%20{1}", escapedSurname, escapedName);
 	}
 
