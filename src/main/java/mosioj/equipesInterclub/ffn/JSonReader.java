@@ -41,7 +41,8 @@ public class JSonReader {
 		// Keeping first parenthesis to act as comma
 		json = json.substring(1, json.length() - 2);
 
-		while (json.length() > 0) {
+		// We read only the first value
+		while (json.length() > 0 && !json.startsWith("},{")) {
 			
 			// Reading the first comma / parenthesis
 			json = json.substring(1);
@@ -57,6 +58,10 @@ public class JSonReader {
 			
 			// Registering this pair
 			answer.put(key, value);
+		}
+		
+		if (json.length() > 0) {
+			LOGGER.warn("Multiple parts found... Reading only the first one.");
 		}
 
 		LOGGER.debug("Done !");

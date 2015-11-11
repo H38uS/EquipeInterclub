@@ -137,17 +137,17 @@ public class PerfChooser {
 
 		// Malus
 		if (max == thisSeason - 2) {
-			LOGGER.warn("Malus for race " + race + ". No performance this season and the one before !");
+			LOGGER.info("Malus for race " + race + ". No performance this season and the one before !");
 			time.malusIt(race, false);
 		}
 
 		if (max < thisSeason - 2) {
-			LOGGER.warn("Huge malus for race " + race + ". No performance for the past two seasons :o");
+			LOGGER.info("Huge malus for race " + race + ". No performance for the past two seasons :o");
 			time.malusIt(race, true);
 		}
 		
 		if (filteredPerfs.size() < 3) {
-			LOGGER.warn("Not enough values... Applying a malus.");
+			LOGGER.info("Not enough values... Applying a malus.");
 			time.malusIt(race, false);
 		}
 

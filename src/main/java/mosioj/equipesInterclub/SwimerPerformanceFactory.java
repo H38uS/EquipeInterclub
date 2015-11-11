@@ -78,14 +78,24 @@ public class SwimerPerformanceFactory {
 			// Get 25m performances
 			LOGGER.info("Reading 25m pool performances...");
 			List<Performance> perfs = reader.readRecord(swimmer, iuf, false);
-			
+
 			// Determine if this is a female or a male
-			final Swimmer newOne = perfs.get(0).isAWoman ? new Nageuse(swimmer) : new Nageur(swimmer);
+			Swimmer newOne = null;
+			if (perfs.size() > 0)
+				newOne = perfs.get(0).isAWoman ? new Nageuse(swimmer) : new Nageur(swimmer);
 
 			LOGGER.info("Reading 50m pool performances...");
 			List<Performance> perfs50 = reader.readRecord(swimmer, iuf, true);
 			for (Performance perf : perfs50) {
 				perf.bonusIt(false);
+			}
+
+			if (perfs50.size() > 0 && newOne == null)
+				newOne = perfs50.get(0).isAWoman ? new Nageuse(swimmer) : new Nageur(swimmer);
+
+			if (newOne == null) {
+				LOGGER.error("No performances found for : " + swimmer + ". Skipping the swimmer.");
+				continue;
 			}
 
 			perfs.addAll(perfs50);
@@ -132,12 +142,14 @@ public class SwimerPerformanceFactory {
 
 		// Writing performances of each swimmer
 		for (Swimmer swimmer : performances.keySet()) {
+
+			LOGGER.info("Writting performances of " + swimmer);
 			boolean firstPerf = true;
 			for (Performance perf : performances.get(swimmer)) {
-				
+
 				row = sheet.createRow(rowIndex++);
 				cellnum = 0;
-				
+
 				// Nom / Prénom si c'est la première ligne du nageur
 				Cell cell = row.createCell(cellnum++);
 				if (firstPerf) {
@@ -147,14 +159,14 @@ public class SwimerPerformanceFactory {
 				if (firstPerf) {
 					cell.setCellValue(swimmer.name);
 				}
-				
+
 				// The performances
 				cell = row.createCell(cellnum++);
 				cell.setCellValue(perf.race.toString());
-				
+
 				// Leave one cell empty for points
 				cell = row.createCell(cellnum++);
-				
+
 				// The male / female attribute
 				cell = row.createCell(cellnum++);
 				if (firstPerf) {
@@ -164,14 +176,16 @@ public class SwimerPerformanceFactory {
 				// The time of the performance
 				cell = row.createCell(cellnum++);
 				cell.setCellValue(perf.time.toString());
-				
+
 				firstPerf = false;
 			}
 		}
 
 		// Writing the results
+		LOGGER.info("Writting to file...");
 		FileOutputStream os = new FileOutputStream(output);
 		wb.write(os);
+		LOGGER.info("Done !");
 	}
 
 	/**
