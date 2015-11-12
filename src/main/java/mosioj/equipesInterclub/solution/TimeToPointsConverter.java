@@ -9,7 +9,6 @@ import java.util.Map;
 
 import org.apache.log4j.Logger;
 
-import mosioj.equipesInterclub.ffn.FFNReader;
 import mosioj.equipesInterclub.swimmer.Category;
 import mosioj.equipesInterclub.swimmer.Race;
 import mosioj.equipesInterclub.swimmer.Swimmer;
@@ -21,7 +20,7 @@ public class TimeToPointsConverter {
 	/**
 	 * Class logger.
 	 */
-	private static final Logger LOGGER = Logger.getLogger(FFNReader.class);
+	private static final Logger LOGGER = Logger.getLogger(TimeToPointsConverter.class);
 
 	/**
 	 * The coefficient map.
@@ -53,6 +52,8 @@ public class TimeToPointsConverter {
 			LOGGER.info("Reading the cotation table...");
 			List<List<String>> points = ExcelReader.readLines(file, "Table");
 			readPoints(points);
+
+			LOGGER.info("Init completed !");
 
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -93,13 +94,13 @@ public class TimeToPointsConverter {
 			for (String time : line) {
 				// Read as is
 				double timeAsDble = Double.parseDouble(time);
-				
+
 				// partie entière
 				long minutes = (long) Math.floor(timeAsDble);
 
 				// Secondes + centieme en centieme
 				long millisecondes = (long) ((timeAsDble - minutes) * 100 * 100);
-				
+
 				long realTime = (minutes * 60 * 100) + millisecondes;
 				times.add(Time.getFromLong(realTime));
 			}
@@ -114,11 +115,6 @@ public class TimeToPointsConverter {
 	 * @param line The current line to parse.
 	 */
 	private void readCoefficientNonRelay(List<String> line) {
-
-		if (line.size() != 19) {
-			LOGGER.debug("Not a performance row (not the correct size)... Skipping it. Row: " + line);
-			return;
-		}
 
 		// Parsing the race
 		String fullRaceInfo = line.get(1);
@@ -154,6 +150,8 @@ public class TimeToPointsConverter {
 		// Adding new values to the map
 		Category[] values = Category.values();
 		for (int i = 0; i < values.length; i++) {
+			if (line.get(i + 3) == null)
+				continue;
 			CoefficientKey key = new CoefficientKey(race, values[i], isWoman, false);
 			coeffMap.put(key, Double.parseDouble(line.get(i + 3)));
 		}
@@ -168,11 +166,6 @@ public class TimeToPointsConverter {
 	 * @param line The current line to parse.
 	 */
 	private void readCoefficientForRelay(List<String> line) {
-
-		if (line.size() != 19) {
-			LOGGER.debug("Not a performance row (not the correct size)... Skipping it. Row: " + line);
-			return;
-		}
 
 		// Parsing the race
 		String fullRaceInfo = line.get(0);
@@ -212,13 +205,17 @@ public class TimeToPointsConverter {
 				continue;
 			}
 
+			if (line.size() != 19) {
+				LOGGER.debug("Not a performance row (not the correct size)... Skipping it. Row: " + line);
+				continue;
+			}
+
 			if (isInRelay) {
 				readCoefficientForRelay(line);
 			} else {
 				readCoefficientNonRelay(line);
 			}
 		}
-
 	}
 
 	/**
@@ -265,6 +262,70 @@ public class TimeToPointsConverter {
 
 	/**
 	 * 
+	 * @param times
+	 * @param swimmers
+	 * @param forNextYear
+	 * @return The points for the given relay.
+	 */
+	public int getPointsOf4x50Relay(Time[] times, Swimmer[] swimmers, boolean forNextYear) {
+
+		boolean[] isWoman = new boolean[4];
+		Category[] categories = new Category[4];
+		for (int i = 0; i < swimmers.length; i++) {
+			isWoman[i] = swimmers[i].isAWoman();
+			categories[i] = swimmers[i].getMemberCategory(forNextYear);
+		}
+
+		return getPointsOf4x50Relay(times, categories, isWoman);
+	}
+
+	/**
+	 * 
+	 * @param times
+	 * @param categories
+	 * @param isWoman
+	 * @return The points for the given relay.
+	 */
+	public int getPointsOf4x50Relay(Time[] times, Category[] categories, boolean[] isWoman) {
+
+		// Gets the coefficient
+		// Mean of each coeff
+		double coeff = 0.0;
+		int nbWomen = 0;
+		Race[] relai = { Race._50DOS, Race._50BRASSE, Race._50PAP, Race._50NL };
+		for (int i = 0; i < categories.length; i++) {
+			if (isWoman[i])
+				nbWomen++;
+			coeff += getCoefficient(relai[i], categories[i], isWoman[i], true);
+		}
+
+		// No points if less that 2 women
+		if (nbWomen < 2)
+			return 0;
+
+		double mean = coeff / categories.length;
+
+		// Compute the relay time
+		long total = 0;
+		for (Time time : times) {
+			total += time.getAsLong();
+		}
+		Time time = Time.getFromLong(total);
+		Time adjusted = Time.getFromLong(Math.round(time.getAsLong() / mean));
+
+		// Read the associated points
+		List<Time> timesTable = pointsRows.get(new SwimCodeValue(Race._4X504N, false));
+		for (int i = 0; i < timesTable.size(); i++) {
+			if (adjusted.compareTo(timesTable.get(i)) <= 0) {
+				return 1501 - i;
+			}
+		}
+
+		return -1;
+	}
+
+	/**
+	 * 
 	 * @param race The race to get the point from.
 	 * @param category The category of the swimmer.
 	 * @param isWoman Whether the swimmer is a woman (or man assumed...).
@@ -302,7 +363,7 @@ public class TimeToPointsConverter {
 
 		@Override
 		public boolean equals(Object other) {
-			
+
 			if (other == null || !(other instanceof SwimCodeValue)) {
 				return false;
 			}
@@ -320,10 +381,7 @@ public class TimeToPointsConverter {
 
 		@Override
 		public int hashCode() {
-			int base = race.hashCode();
-			if (isWoman)
-				base += 2;
-			return base;
+			return (race.name() + isWoman).hashCode();
 		}
 
 		@Override

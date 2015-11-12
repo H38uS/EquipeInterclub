@@ -28,7 +28,7 @@ import mosioj.equipesInterclub.swimmer.performance.PerfRaceComparator;
 import mosioj.equipesInterclub.swimmer.performance.Performance;
 import mosioj.equipesInterclub.util.ExcelReader;
 
-public class SwimerPerformanceFactory {
+public class SwimmerPerformanceFactory {
 
 	/**
 	 * Class logger.
@@ -46,7 +46,7 @@ public class SwimerPerformanceFactory {
 	 * @throws FileNotFoundException
 	 * @throws IOException
 	 */
-	public SwimerPerformanceFactory() throws FileNotFoundException, IOException {
+	public SwimmerPerformanceFactory() throws FileNotFoundException, IOException {
 		File file = new File(getClass().getResource("/my.properties").getFile());
 		LOGGER.debug("Reading properties in : " + file.getAbsolutePath());
 		prop = new Properties();
@@ -62,7 +62,7 @@ public class SwimerPerformanceFactory {
 	public static void main(String[] args) throws Exception {
 
 		// Read the swimmers from the Excel Sheet
-		SwimerPerformanceFactory spf = new SwimerPerformanceFactory();
+		SwimmerPerformanceFactory spf = new SwimmerPerformanceFactory();
 		LOGGER.info("Computing swimmers...");
 		List<Swimmer> swimmers = spf.readSwimmers();
 		LOGGER.info("Got the swimmers !");

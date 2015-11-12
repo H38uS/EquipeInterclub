@@ -42,14 +42,14 @@ public final class DataFactory {
 
 			// On complete l'information sur le nageur
 			if (line.size() == 2) {
-				current.addRace(Race.valueOf("_" + line.get(0)), Integer.valueOf(line.get(1)));
+				current.addRace(Race.valueOf("_" + line.get(0)), (int) Math.round(Double.valueOf(line.get(1))));
 			}
 
 			// Nouveau nageur
 			if (line.size() == 5) {
 				String name = line.get(1);
 				Race race = Race.valueOf("_" + line.get(2));
-				int points = Integer.valueOf(line.get(3));
+				int points = (int) Math.round(Double.valueOf(line.get(3)));
 				current = Sexe.valueOf(line.get(4)) == Sexe.F ? new Nageuse(surname,
 				                                                            name,
 				                                                            race,

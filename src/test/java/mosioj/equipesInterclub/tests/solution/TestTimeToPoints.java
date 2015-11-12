@@ -1,7 +1,6 @@
 package mosioj.equipesInterclub.tests.solution;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
 
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -13,16 +12,15 @@ import mosioj.equipesInterclub.swimmer.performance.Time;
 
 public class TestTimeToPoints {
 	
-	private TimeToPointsConverter converter;
+	private static TimeToPointsConverter converter;
 
 	@BeforeClass
-	public void setUp() {
+	public static void setUp() {
 		converter = new TimeToPointsConverter();
 	}
 
 	@Test
 	public void singleRaceTest() {
-
 
 		// Femme
 		assertEquals(1184, converter.getPoints(Race._100NL, new Time("1:00.00"), Category.C1, true));
@@ -44,7 +42,21 @@ public class TestTimeToPoints {
 
 	@Test
 	public void relayTest() {
-		fail();
+		
+		Time[] times = {new Time("32.18"), new Time("31.77"), new Time("26.42"), new Time("25.59")};
+		Category[] categories = {Category.C1, Category.C2, Category.C4, Category.C3};
+		boolean[] isWoman = {true, false, false, true};
+		assertEquals(1293, converter.getPointsOf4x50Relay(times, categories, isWoman));
+
+		Time[] times2 = {new Time("35.17"), new Time("43.65"), new Time("33.15"), new Time("31.13")};
+		Category[] categories2 = {Category.C7, Category.C10, Category.C4, Category.C3};
+		boolean[] isWoman2 = {true, true, false, true};
+		assertEquals(1237, converter.getPointsOf4x50Relay(times2, categories2, isWoman2));
+
+		Time[] times3 = {new Time("33.49"), new Time("50.12"), new Time("27.72"), new Time("24.35")};
+		Category[] categories3 = {Category.C3, Category.C12, Category.C3, Category.C3};
+		boolean[] isWoman3 = {true, false, false, false};
+		assertEquals(0, converter.getPointsOf4x50Relay(times3, categories3, isWoman3));
 	}
 
 	@Test

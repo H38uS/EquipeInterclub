@@ -21,8 +21,14 @@ public enum Race {
 	_50NL(10, "50 Nage Libre"), _100NL(80, "100 Nage Libre"), _400NL(400, "400 Nage Libre"), //
 	
 	/** 4N. */
-	_2004N(150, "200 4 Nages");
-
+	_2004N(150, "200 4 Nages"), //
+	
+	/** Relais */
+	_4X504N(0, "4x50 4 Nages"), //
+	_10X50NL(0, "10x50 NL"), //
+	
+	;
+	
 	/**
 	 * The base malus to apply, in milliseconds.
 	 */

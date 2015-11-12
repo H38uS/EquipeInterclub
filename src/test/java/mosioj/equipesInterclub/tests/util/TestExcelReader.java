@@ -53,19 +53,19 @@ public class TestExcelReader {
 
 	@Test
 	public void testMidEmptyLine() {
-		String[] expected = { "100NL", "1128" };
+		String[] expected = { "100NL", "1128.0" };
 		testLine(expected, 4);
 	}
 
 	@Test
 	public void testMidDefLine() {
-		String[] expected = { "JOURY", "ANTOINE", "50NL", "1070", "H" };
+		String[] expected = { "JOURY", "ANTOINE", "50NL", "1070.0", "H" };
 		testLine(expected, 11);
 	}
 
 	@Test
 	public void testLastLine() {
-		String[] expected = { "50NL", "1083" };
+		String[] expected = { "50NL", "1083.0" };
 		testLine(expected, 47);
 	}
 }
