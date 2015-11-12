@@ -3,6 +3,7 @@ package mosioj.equipesInterclub.tests.solution;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 
+import org.junit.BeforeClass;
 import org.junit.Test;
 
 import mosioj.equipesInterclub.solution.TimeToPointsConverter;
@@ -11,40 +12,43 @@ import mosioj.equipesInterclub.swimmer.Race;
 import mosioj.equipesInterclub.swimmer.performance.Time;
 
 public class TestTimeToPoints {
+	
+	private TimeToPointsConverter converter;
+
+	@BeforeClass
+	public void setUp() {
+		converter = new TimeToPointsConverter();
+	}
 
 	@Test
 	public void singleRaceTest() {
 
-		TimeToPointsConverter converter = new TimeToPointsConverter();
 
 		// Femme
-		assertEquals(1184, converter.getPoints(Race._100NL, new Time("1:00.00"), Category.C1, true, false));
-		assertEquals(1217, converter.getPoints(Race._100NL, new Time("59.00"), Category.C1, true, false));
-		assertEquals(1304, converter.getPoints(Race._100NL, new Time("59.00"), Category.C4, true, false));
+		assertEquals(1184, converter.getPoints(Race._100NL, new Time("1:00.00"), Category.C1, true));
+		assertEquals(1217, converter.getPoints(Race._100NL, new Time("59.00"), Category.C1, true));
+		assertEquals(1304, converter.getPoints(Race._100NL, new Time("59.00"), Category.C4, true));
 		
-		assertEquals(1139, converter.getPoints(Race._50BRASSE, new Time("36.00"), Category.C1, true, false));
-		assertEquals(1160, converter.getPoints(Race._50BRASSE, new Time("36.00"), Category.C2, true, false));
+		assertEquals(1139, converter.getPoints(Race._50BRASSE, new Time("36.00"), Category.C1, true));
+		assertEquals(1160, converter.getPoints(Race._50BRASSE, new Time("36.00"), Category.C2, true));
 		
 		// Homme
-		assertEquals(1124, converter.getPoints(Race._100PAP, new Time("1:00.01"), Category.C1, false, false));
-		assertEquals(1154, converter.getPoints(Race._100PAP, new Time("59.00"), Category.C1, false, false));
-		assertEquals(1182, converter.getPoints(Race._100PAP, new Time("59.00"), Category.C4, false, false));
+		assertEquals(1124, converter.getPoints(Race._100PAP, new Time("1:00.01"), Category.C1, false));
+		assertEquals(1154, converter.getPoints(Race._100PAP, new Time("59.00"), Category.C1, false));
+		assertEquals(1182, converter.getPoints(Race._100PAP, new Time("59.00"), Category.C4, false));
 		
-		assertEquals(1001, converter.getPoints(Race._50DOS, new Time("31.52"), Category.C1, false, false));
-		assertEquals(998, converter.getPoints(Race._50DOS, new Time("31.57"), Category.C1, false, false));
-		assertEquals(1132, converter.getPoints(Race._50DOS, new Time("31.57"), Category.C5, false, false));
+		assertEquals(1001, converter.getPoints(Race._50DOS, new Time("31.52"), Category.C1, false));
+		assertEquals(998, converter.getPoints(Race._50DOS, new Time("31.57"), Category.C1, false));
+		assertEquals(1132, converter.getPoints(Race._50DOS, new Time("31.57"), Category.C5, false));
 	}
 
 	@Test
 	public void relayTest() {
-
 		fail();
 	}
 
 	@Test
 	public void coefficientTest() {
-
-		TimeToPointsConverter converter = new TimeToPointsConverter();
 
 		// Test femme classique
 		assertEquals(1.000, converter.getCoefficient(Race._100NL, Category.C1, true, false), 0.0001);

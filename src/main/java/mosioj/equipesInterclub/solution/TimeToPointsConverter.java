@@ -228,11 +228,10 @@ public class TimeToPointsConverter {
 	 * @param time The time made in this race.
 	 * @param swimmer The swimmer that did the race.
 	 * @param forNextYear Whether to evaluate for this year, or take next year category.
-	 * @param isRelay True if time is performed in a mixed relay (only for women).
 	 * @return The number of points of points for this time on this race, for this category/sex and relay mode or not.
 	 */
-	public int getPoints(Race race, Time time, Swimmer swimmer, boolean forNextYear, boolean isRelay) {
-		return getPoints(race, time, swimmer.getMemberCategory(forNextYear), swimmer.isAWoman(), isRelay);
+	public int getPoints(Race race, Time time, Swimmer swimmer, boolean forNextYear) {
+		return getPoints(race, time, swimmer.getMemberCategory(forNextYear), swimmer.isAWoman());
 	}
 
 	/**
@@ -242,13 +241,12 @@ public class TimeToPointsConverter {
 	 * @param time The time made in this race.
 	 * @param category The category of the swimmer.
 	 * @param isWoman Whether the swimmer is a woman (or man assumed...).
-	 * @param isRelay True if time is performed in a mixed relay (only for women).
 	 * @return The number of points of points for this time on this race, for this category/sex and relay mode or not.
 	 */
-	public int getPoints(Race race, Time time, Category category, boolean isWoman, boolean isRelay) {
+	public int getPoints(Race race, Time time, Category category, boolean isWoman) {
 
 		// Get the coefficient
-		double coeff = getCoefficient(race, category, isWoman, isRelay);
+		double coeff = getCoefficient(race, category, isWoman, false);
 		LOGGER.trace("Before was: " + time);
 		Time adjusted = Time.getFromLong(Math.round(time.getAsLong() / coeff));
 		LOGGER.trace("After applying coefficient: " + adjusted);
