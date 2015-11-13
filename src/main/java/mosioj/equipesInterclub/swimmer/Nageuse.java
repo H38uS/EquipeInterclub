@@ -30,6 +30,15 @@ public class Nageuse extends Swimmer {
 		races.putAll(swimmer.races);
 	}
 
+	/**
+	 * 
+	 * @param familyName
+	 * @param name
+	 */
+	public Nageuse(String familyName, String name) {
+		super(familyName, name);
+	}
+
 	@Override
 	public boolean isAWoman() {
 		return true;

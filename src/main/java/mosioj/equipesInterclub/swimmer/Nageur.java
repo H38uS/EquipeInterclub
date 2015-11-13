@@ -19,6 +19,7 @@ public class Nageur extends Swimmer {
 	public Nageur(final String pSurname, final String pName, final Race race, final int points) {
 		super(pSurname, pName, race, points);
 	}
+	
 
 	/**
 	 * Duplicate a swimmer without any sex to a male.
@@ -29,6 +30,16 @@ public class Nageur extends Swimmer {
 		super(swimmer.surname, swimmer.name);
 		races.putAll(swimmer.races);
 	}
+
+	/**
+	 * 
+	 * @param familyName
+	 * @param name
+	 */
+	public Nageur(String familyName, String name) {
+		super(familyName, name);
+	}
+
 
 	@Override
 	public boolean isAWoman() {

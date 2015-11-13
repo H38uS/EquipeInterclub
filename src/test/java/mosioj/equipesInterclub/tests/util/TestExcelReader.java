@@ -22,8 +22,8 @@ public class TestExcelReader {
 	public static void setUpBeforeClass() throws Exception {
 		Object o = new Object();
 		File root = new File(o.getClass().getResource("/").getFile());
-		File file = new File(root, "POINTS NAGEURS.xls");
-		testResults = ExcelReader.readLines(file, "Feuil1");
+		File file = new File(root, "POINTS NAGEURS.xlsx");
+		testResults = ExcelReader.readLines(file, "Sheet0");
 	}
 
 	/**
@@ -42,30 +42,30 @@ public class TestExcelReader {
 
 	@Test
 	public void testCount() {
-		assertEquals(48, testResults.size());
+		assertEquals(345, testResults.size());
 	}
 
 	@Test
 	public void testFirstLine() {
-		String[] expected = { "NOM", "PRENOM", "NAGE", "POINTS", "Homme / Femme" };
+		String[] expected = { "NOM", "PRENOM", "NAGE", "Année Naissance", "Homme / Femme", "TEMPS" };
 		testLine(expected, 0);
 	}
 
 	@Test
 	public void testMidEmptyLine() {
-		String[] expected = { "100NL", "1128.0" };
-		testLine(expected, 4);
+		String[] expected = { null, null, "50BRASSE", null, null, "49.34" };
+		testLine(expected, 3);
 	}
 
 	@Test
 	public void testMidDefLine() {
-		String[] expected = { "JOURY", "ANTOINE", "50NL", "1070.0", "H" };
-		testLine(expected, 11);
+		String[] expected = { "Joury", "Antoine", "50PAP", "1973.0", "H", "31.09" };
+		testLine(expected, 187);
 	}
 
 	@Test
 	public void testLastLine() {
-		String[] expected = { "50NL", "1083.0" };
-		testLine(expected, 47);
+		String[] expected = { null, null, "400NL", null, null, "6:36.80" };
+		testLine(expected, 344);
 	}
 }

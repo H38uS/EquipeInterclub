@@ -4,6 +4,9 @@ import java.text.MessageFormat;
 import java.util.HashMap;
 import java.util.Map;
 
+import mosioj.equipesInterclub.solution.TimeToPointsConverter;
+import mosioj.equipesInterclub.swimmer.performance.Time;
+
 /**
  * Un nageur, avec les courses qu'il peut faire (et ses points).
  * 
@@ -69,9 +72,11 @@ public class Swimmer extends SportMember {
 	 * Ajoute une nage.
 	 * 
 	 * @param race La nage.
-	 * @param points Les points que le nageur fait à cette nage.
+	 * @param time Le temps que le nageur fait à cette nage.
 	 */
-	public void addRace(Race race, int points) {
+	public void addRace(Race race, Time time) {
+		TimeToPointsConverter conveter = TimeToPointsConverter.getInstance();
+		int points = conveter.getPoints(race, time, getMemberCategory(false), isAWoman());
 		races.put(race, points);
 	}
 
