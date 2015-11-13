@@ -146,8 +146,13 @@ public class FFNReader {
 				line = readNLines(in, 9);
 				String date = getValueInTag(line);
 
-				LOGGER.debug("New Performance read !! Is: " + race + " / " + time + " / " + date);
-				perfs.add(new Performance(race, time, date));
+				Performance perf = new Performance(race, time, date);
+				if (perf.race == null) {
+					LOGGER.info("Race cannot be read ! Race is: " + race + ". Skipping it.");
+					continue;
+				}
+				LOGGER.debug("New Performance read !! Is: " + perf);
+				perfs.add(perf);
 			}
 
 			line = in.readLine();

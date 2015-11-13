@@ -28,6 +28,7 @@ public class PerfChooser {
 	 */
 	public PerfChooser(List<Performance> perfs) {
 
+		LOGGER.debug(perfs);
 		performances = new ArrayList<List<Performance>>();
 		Race race = null;
 
@@ -50,6 +51,15 @@ public class PerfChooser {
 			}
 
 			current.add(perf);
+		}
+
+		// Adding the last one...
+		if (!current.isEmpty())
+			performances.add(current);
+
+		LOGGER.debug("Sorted races:");
+		for (List<Performance> performance : performances) {
+			LOGGER.debug(performance);
 		}
 	}
 
@@ -107,10 +117,6 @@ public class PerfChooser {
 
 		Performance first = perfs.get(0);
 		Race race = first.race;
-		if (race == null) {
-			LOGGER.debug("Race is null, skipping those performances.");
-			return null;
-		}
 		LOGGER.info("Processing race " + race + "...");
 		SimpleDateFormat sdf = new SimpleDateFormat("DD/MM/YYYY");
 		final int thisSeason = getSeasonYear(sdf.format(new Date()));
@@ -145,14 +151,14 @@ public class PerfChooser {
 			LOGGER.info("Huge malus for race " + race + ". No performance for the past two seasons :o");
 			time.malusIt(race, true);
 		}
-		
+
 		if (filteredPerfs.size() < 3) {
 			LOGGER.info("Not enough values... Applying a malus.");
 			time.malusIt(race, false);
 		}
 
 		LOGGER.debug("Final score is: " + time);
-		
+
 		return new Performance(race, time, null, first.isAWoman);
 	}
 }
