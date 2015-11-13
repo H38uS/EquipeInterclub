@@ -18,7 +18,11 @@ public class TestCategory {
 		assertEquals(Category.C5, Category.readCategory(47));
 		assertEquals(Category.C14, Category.readCategory(90));
 		assertEquals(Category.C14, Category.readCategory(94));
-		assertEquals(Category.C14, Category.readCategory(97));
+		assertEquals(Category.C15, Category.readCategory(97));
+		assertEquals(Category.C15, Category.readCategory(99));
+		assertEquals(Category.C16, Category.readCategory(100));
+		assertEquals(Category.C16, Category.readCategory(104));
+		assertEquals(Category.C16, Category.readCategory(107));
 	}
 
 }
