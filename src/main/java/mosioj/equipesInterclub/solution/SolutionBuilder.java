@@ -2,6 +2,7 @@ package mosioj.equipesInterclub.solution;
 
 import java.io.File;
 import java.text.MessageFormat;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -22,7 +23,7 @@ public class SolutionBuilder {
 	/**
 	 * La profondeur maximale de recherche.
 	 */
-	private static final int MAX_DEPTH = 6;
+	private static final int MAX_DEPTH = 2;
 
 	/**
 	 * Class logger.
@@ -48,7 +49,7 @@ public class SolutionBuilder {
 	 * L'historique des solutions déjà explorée.
 	 */
 	private final Set<Solution> seen = new HashSet<Solution>();
-	
+
 	/**
 	 * Class constructor.
 	 * 
@@ -58,7 +59,16 @@ public class SolutionBuilder {
 	public SolutionBuilder(final File data) throws Exception {
 		LOGGER.info("Construction de la solution initiale...");
 		swimmers = DataFactory.getSwimmers(ExcelReader.readLines(data, "Sheet0"));
-		bestSolution = new Solution(swimmers);
+
+		List<Swimmer> sortedSwimmers = new ArrayList<Swimmer>();
+		for (Swimmer swimmer : swimmers) {
+			if (swimmer.getMaxPoints() > 900) {
+				sortedSwimmers.add(swimmer);
+			}
+		}
+
+		LOGGER.info("Recherche de la meilleure solution avec " + sortedSwimmers.size() + " nageurs.");
+		bestSolution = new Solution(sortedSwimmers);
 		LOGGER.info("Ok. Solution initiale: ");
 		bestSolution.print(swimmers);
 	}
@@ -70,7 +80,7 @@ public class SolutionBuilder {
 	public List<Swimmer> getSwimmers() {
 		return swimmers;
 	}
-	
+
 	/**
 	 * 
 	 * @return La meilleure solution.
@@ -80,6 +90,7 @@ public class SolutionBuilder {
 		LOGGER.info("Recherche de la meilleure composition...");
 		for (int i = 0; i < bestSolution.getNbRaces(); i++) {
 
+			LOGGER.debug("Parcours d'une nouvelle nage: " + (i + 1) + " / " + bestSolution.getNbRaces() + "...");
 			for (Swimmer swimmer : swimmers) {
 
 				// Le nageur est déjà présent
@@ -96,9 +107,9 @@ public class SolutionBuilder {
 
 				// Est-ce qu'elle est mieux ?
 				if (solution.isValid() && points > bestPoints) {
-					LOGGER.debug(MessageFormat.format("Nouvelle solution trouvée ! Points : {0} / BestPoints : {1}.",
-					                                  points,
-					                                  bestPoints));
+					LOGGER.info(MessageFormat.format(	"Nouvelle solution trouvée ! Points : {0} / BestPoints : {1}.",
+														points,
+														bestPoints));
 					bestSolution = solution;
 					bestPoints = points;
 				}
@@ -106,6 +117,7 @@ public class SolutionBuilder {
 		}
 
 		LOGGER.info("Recherche terminée ! ");
+		LOGGER.info("Nombre de solutions parcourues : " + seen.size() + ".");
 		return bestSolution;
 	}
 
