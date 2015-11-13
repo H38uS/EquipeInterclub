@@ -33,7 +33,7 @@ public class SwimmerPerformanceFactory {
 	/**
 	 * Class logger.
 	 */
-	private static final Logger LOGGER = Logger.getLogger(FFNReader.class);
+	private static final Logger LOGGER = Logger.getLogger(SwimmerPerformanceFactory.class);
 
 	/**
 	 * Properties used.
@@ -81,8 +81,10 @@ public class SwimmerPerformanceFactory {
 
 			// Determine if this is a female or a male
 			Swimmer newOne = null;
-			if (perfs.size() > 0)
+			if (perfs.size() > 0) {
 				newOne = perfs.get(0).isAWoman ? new Nageuse(swimmer) : new Nageur(swimmer);
+				newOne.birthYear = swimmer.birthYear;
+			}
 
 			LOGGER.info("Reading 50m pool performances...");
 			List<Performance> perfs50 = reader.readRecord(swimmer, iuf, true);
@@ -90,8 +92,10 @@ public class SwimmerPerformanceFactory {
 				perf.bonusIt(false);
 			}
 
-			if (perfs50.size() > 0 && newOne == null)
+			if (perfs50.size() > 0 && newOne == null) {
 				newOne = perfs50.get(0).isAWoman ? new Nageuse(swimmer) : new Nageur(swimmer);
+				newOne.birthYear = swimmer.birthYear;
+			}
 
 			if (newOne == null) {
 				LOGGER.error("No performances found for : " + swimmer + ". Skipping the swimmer.");
@@ -134,7 +138,7 @@ public class SwimmerPerformanceFactory {
 		// Writing header
 		Row row = sheet.createRow(rowIndex++);
 		int cellnum = 0;
-		String[] headers = { "NOM", "PRENOM", "NAGE", "POINTS", "Homme / Femme", "TEMPS" };
+		String[] headers = { "NOM", "PRENOM", "NAGE", "Année Naissance", "Homme / Femme", "TEMPS" };
 		for (String header : headers) {
 			Cell cell = row.createCell(cellnum++);
 			cell.setCellValue(header);
@@ -164,8 +168,11 @@ public class SwimmerPerformanceFactory {
 				cell = row.createCell(cellnum++);
 				cell.setCellValue(perf.race.toString());
 
-				// Leave one cell empty for points
+				// Birth date
 				cell = row.createCell(cellnum++);
+				if (firstPerf) {
+					cell.setCellValue(swimmer.birthYear);
+				}
 
 				// The male / female attribute
 				cell = row.createCell(cellnum++);

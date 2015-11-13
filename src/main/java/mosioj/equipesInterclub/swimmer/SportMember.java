@@ -8,7 +8,7 @@ public abstract class SportMember {
 	/**
 	 * Member year of birth.
 	 */
-	protected int birthYear;
+	public int birthYear;
 
 	/**
 	 * Reads information provided.
