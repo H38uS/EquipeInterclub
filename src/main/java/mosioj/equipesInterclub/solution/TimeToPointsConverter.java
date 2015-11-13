@@ -23,6 +23,11 @@ public class TimeToPointsConverter {
 	private static final Logger LOGGER = Logger.getLogger(TimeToPointsConverter.class);
 
 	/**
+	 * The only instance.
+	 */
+	private static TimeToPointsConverter instance;
+
+	/**
 	 * The coefficient map.
 	 */
 	private final Map<CoefficientKey, Double> coeffMap = new HashMap<TimeToPointsConverter.CoefficientKey, Double>();
@@ -38,9 +43,20 @@ public class TimeToPointsConverter {
 	private final Map<SwimCodeValue, List<Time>> pointsRows = new HashMap<SwimCodeValue, List<Time>>();
 
 	/**
+	 * 
+	 * @return The only instance.
+	 */
+	public static TimeToPointsConverter getInstance() {
+		if (instance == null) {
+			instance = new TimeToPointsConverter();
+		}
+		return instance;
+	}
+
+	/**
 	 * Class constructor.
 	 */
-	public TimeToPointsConverter() {
+	private TimeToPointsConverter() {
 		try {
 			String url = getClass().getResource("/Equipe InterclubsNat 2015 et +.xlsx").getFile();
 			File file = new File(url.replaceAll("%20", " "));

@@ -16,7 +16,7 @@ public class TestTimeToPoints {
 
 	@BeforeClass
 	public static void setUp() {
-		converter = new TimeToPointsConverter();
+		converter = TimeToPointsConverter.getInstance();
 	}
 
 	@Test
