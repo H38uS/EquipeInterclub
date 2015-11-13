@@ -76,12 +76,12 @@ public class TestTimeToPoints {
 
 		// Test mec
 		assertEquals(1.000, converter.getCoefficient(Race._100PAP, Category.C1, false, false), 0.0001);
-		assertEquals(0.999, converter.getCoefficient(Race._100PAP, Category.C2, false, false), 0.0001);
+		assertEquals(1.002, converter.getCoefficient(Race._100PAP, Category.C2, false, false), 0.0001);
 		assertEquals(1.134, converter.getCoefficient(Race._100PAP, Category.C7, false, false), 0.0001);
 		assertEquals(2.032, converter.getCoefficient(Race._100PAP, Category.C12, false, false), 0.0001);
 
 		// Test femme relai
 		assertEquals(1.010, converter.getCoefficient(Race._100NL, Category.C2, true, true), 0.0001);
-		assertEquals(1.172, converter.getCoefficient(Race._50BRASSE, Category.C3, true, true), 0.0001);
+		assertEquals(1.172, converter.getCoefficient(Race._50BRASSE, Category.C3, true, true), 0.0001); // FIXME relai pas lu
 	}
 }

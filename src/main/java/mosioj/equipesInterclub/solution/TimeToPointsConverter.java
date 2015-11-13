@@ -149,12 +149,21 @@ public class TimeToPointsConverter {
 
 		// Adding new values to the map
 		Category[] values = Category.values();
+		int cat = 0;
 		for (int i = 0; i < values.length; i++) {
-			if (line.get(i + 3) == null)
+			String value = line.get(i + 3);
+			if (value == null)
 				continue;
-			CoefficientKey key = new CoefficientKey(race, values[i], isWoman, false);
-			coeffMap.put(key, Double.parseDouble(line.get(i + 3)));
+			double coeff = Double.parseDouble(value);
+			if (coeff < 1.0 || coeff > 7) {
+				LOGGER.trace("Skipping invalid coeffiscient : " + value);
+				continue;
+			}
+			CoefficientKey key = new CoefficientKey(race, values[cat++], isWoman, false);
+			LOGGER.trace(key + " / " + coeff);
+			coeffMap.put(key, coeff);
 		}
+		LOGGER.info("Got coeffiscient list for race " + race + " ! Woman ? " + isWoman);
 
 		// Registering the race
 		swimCodes.put((int) Math.round(Double.parseDouble(id)), new SwimCodeValue(race, isWoman));
@@ -169,6 +178,11 @@ public class TimeToPointsConverter {
 
 		// Parsing the race
 		String fullRaceInfo = line.get(0);
+		if (fullRaceInfo == null) {
+			LOGGER.debug("Race is null, skipping. Row: " + line);
+			return;
+		}
+		
 		String raceToParse = fullRaceInfo.replaceAll(" ", "");
 		Race race = Race.getRace(raceToParse);
 		if (race == null) {
@@ -178,14 +192,17 @@ public class TimeToPointsConverter {
 
 		// Adding new values to the map
 		Category[] values = Category.values();
-		for (int i = 0; i < values.length; i++) {
-			if (values[i] == null) {
+		int cat = 0;
+		for (int i = 1; i < line.size(); i++) {
+			if (line.get(i) == null) {
 				continue;
 			}
+			
 			// Nécessairement pour une femme
 			// Et un relai
-			CoefficientKey key = new CoefficientKey(race, values[i], true, true);
-			coeffMap.put(key, Double.parseDouble(line.get(i + 1)));
+			CoefficientKey key = new CoefficientKey(race, values[cat++], true, true);
+			double val = Double.parseDouble(line.get(i));
+			coeffMap.put(key, val);
 		}
 	}
 
@@ -200,12 +217,13 @@ public class TimeToPointsConverter {
 		for (List<String> line : coeffs) {
 
 			LOGGER.trace(line);
-			if (line.size() > 0 && "Dames en Relais".equals(line.get(0))) {
+			if (line.size() > 0 && "Dames en relais".equals(line.get(0))) {
+				LOGGER.info("Reading relay coeffiscients...");
 				isInRelay = true;
 				continue;
 			}
 
-			if (line.size() != 19) {
+			if (line.size() < 15) {
 				LOGGER.debug("Not a performance row (not the correct size)... Skipping it. Row: " + line);
 				continue;
 			}
