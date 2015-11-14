@@ -28,6 +28,7 @@ public class Nageuse extends Swimmer {
 	public Nageuse(Swimmer swimmer) {
 		super(swimmer.surname, swimmer.name);
 		races.putAll(swimmer.races);
+		times.putAll(swimmer.times);
 	}
 
 	/**

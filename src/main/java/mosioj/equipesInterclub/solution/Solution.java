@@ -3,7 +3,7 @@ package mosioj.equipesInterclub.solution;
 import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -26,7 +26,7 @@ public class Solution {
 	/**
 	 * Les nages nécessaire.
 	 */
-	private Map<Race, Integer> races = new HashMap<Race, Integer>();
+	private Map<Race, Integer> races = new LinkedHashMap<Race, Integer>();
 
 	/**
 	 * Class constructor.
@@ -128,32 +128,39 @@ public class Solution {
 	 */
 	public void print(List<Swimmer> input) {
 
-		
 		int points = 0;
 		List<StringBuilder> lines = new ArrayList<StringBuilder>();
 
 		// Récupération des points sur chaque nage
 		for (Race race : races.keySet()) {
-
 			Swimmer swimmer = swimmers[races.get(race)];
-			int pointsRace = swimmer.getPoints(race);
-			points += pointsRace;
-
 			StringBuilder message = new StringBuilder();
 			message.append(race);
 			message.append(" : ");
 			message.append(swimmer);
-			message.append(" (");
-			message.append(pointsRace);
-			message.append(" points) ");
 			lines.add(message);
+		}
+
+		// Alignement
+		align(lines);
+		
+
+		int index = 0;
+		for (Race race : races.keySet()) {
+			Swimmer swimmer = swimmers[races.get(race)];
+			int pointsRace = swimmer.getPoints(race);
+			points += pointsRace;
+			lines.get(index).append(" (" + pointsRace + " points - ");
+			lines.get(index).append(swimmer.getTime(race));
+			lines.get(index).append(") ");
+			index++;
 		}
 
 		// Alignement
 		align(lines);
 
 		// Récupération du maximum possible de chaque nageur
-		int index = 0;
+		index = 0;
 		for (Race race : races.keySet()) {
 
 			Swimmer swimmer = swimmers[races.get(race)];
@@ -187,7 +194,7 @@ public class Solution {
 			}
 			
 			Swimmer swimmer = swimmers[races.get(race)];
-			int point = swimmer.getMaxPoints();
+			int point = swimmer.getPoints(race);
 
 			lines.get(index).append("Max sur la nage ");
 			lines.get(index).append(maxPointsRace);

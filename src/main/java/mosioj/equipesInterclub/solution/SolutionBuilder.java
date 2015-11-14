@@ -62,7 +62,7 @@ public class SolutionBuilder {
 
 		List<Swimmer> sortedSwimmers = new ArrayList<Swimmer>();
 		for (Swimmer swimmer : swimmers) {
-			if (swimmer.getMaxPoints() > 900) {
+			if (swimmer.getMaxPoints() > 1000) {
 				sortedSwimmers.add(swimmer);
 			}
 		}

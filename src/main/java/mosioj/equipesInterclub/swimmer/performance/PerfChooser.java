@@ -152,11 +152,6 @@ public class PerfChooser {
 			time.malusIt(race, true);
 		}
 
-		if (filteredPerfs.size() < 3) {
-			LOGGER.info("Not enough values... Applying a malus.");
-			time.malusIt(race, false);
-		}
-
 		LOGGER.debug("Final score is: " + time);
 
 		return new Performance(race, time, null, first.isAWoman);

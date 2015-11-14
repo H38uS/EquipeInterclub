@@ -21,6 +21,11 @@ public class Swimmer extends SportMember {
 	protected final Map<Race, Integer> races = new HashMap<Race, Integer>();
 
 	/**
+	 * Les nages du nageur, avec les temps associés.
+	 */
+	protected final Map<Race, Time> times = new HashMap<Race, Time>();
+
+	/**
 	 * Le nom de famille.
 	 */
 	public final String surname;
@@ -78,6 +83,7 @@ public class Swimmer extends SportMember {
 		TimeToPointsConverter conveter = TimeToPointsConverter.getInstance();
 		int points = conveter.getPoints(race, time, getMemberCategory(false), isAWoman());
 		races.put(race, points);
+		times.put(race, time);
 	}
 
 	/**
@@ -123,6 +129,18 @@ public class Swimmer extends SportMember {
 			return races.get(race);
 		}
 		return 900; // valeur par défaut
+	}
+
+	/**
+	 * 
+	 * @param race
+	 * @return Le temps que le nageur fait à cette nage.
+	 */
+	public Time getTime(Race race) {
+		if (times.containsKey(race)) {
+			return times.get(race);
+		}
+		return null;
 	}
 
 	@Override
